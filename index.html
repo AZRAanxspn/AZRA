@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZRA • портал</title>
+    <!-- Font Awesome для иконок (бесплатные) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 30% 10%, #1a0000 0%, #0b0b0b 80%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* анимированные линии фона (неоновый красный хаос) */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, 
+                rgba(255, 0, 0, 0.02) 0px, 
+                rgba(255, 0, 0, 0.02) 20px,
+                transparent 20px,
+                transparent 40px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle at 70% 50%, rgba(255, 40, 40, 0.15), transparent 50%);
+            top: -25%;
+            left: -25%;
+            animation: rotateSlow 40s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes rotateSlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* главная карточка */
+        .azra-card {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            width: 100%;
+            background: rgba(10, 0, 0, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(220, 0, 0, 0.3);
+            border-radius: 48px 48px 36px 36px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 
+                        0 0 30px rgba(255, 0, 0, 0.5),
+                        inset 0 0 30px rgba(255, 60, 60, 0.25);
+            padding: 2rem 2rem 3rem;
+            transition: box-shadow 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .azra-card:hover {
+            box-shadow: 0 25px 50px rgba(255, 0, 0, 0.4), 0 0 60px #ff2a2a;
+            border-color: rgba(255, 70, 70, 0.6);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* красное окошко (ник) */
+        .nickname-window {
+            background: #aa0606;
+            background: linear-gradient(145deg, #d42424 0%, #8b0000 100%);
+            border-radius: 60px 60px 30px 30px;
+            padding: 1.4rem 2.2rem;
+            margin: -2.8rem auto 2rem auto; /* выезжает вверх */
+            width: fit-content;
+            min-width: 240px;
+            text-align: center;
+            border: 3px solid #ff5e5e;
+            box-shadow: 0 15px 25px rgba(180, 0, 0, 0.7), 0 0 40px #ff4545, inset 0 2px 10px rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+            transition: 0.2s;
+            letter-spacing: 4px;
+        }
+
+        .nickname-window h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 15px currentColor, 0 0 30px #ff8080;
+            filter: drop-shadow(0 4px 4px #3d0000);
+            word-break: break-word;
+        }
+
+        /* описание с авторским родом занятий */
+        .bio {
+            text-align: center;
+            margin: 2rem 0 2.5rem 0;
+            padding: 0.5rem;
+        }
+
+        .glitch-text {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #f0c0c0;
+            text-shadow: 0 0 10px rgba(255, 100, 100, 0.9);
+            background: rgba(0,0,0,0.3);
+            padding: 1rem 1.8rem;
+            border-radius: 60px;
+            display: inline-block;
+            backdrop-filter: blur(4px);
+            border: 1px solid #a00;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px rgba(255,0,0,0.3);
+        }
+
+        .bio i {
+            color: #ff7b7b;
+            margin: 0 6px;
+        }
+
+        /* сетка соц кнопок */
+        .links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-btn {
+            flex: 1 1 calc(50% - 1.2rem);
+            min-width: 200px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 1.2rem 1.8rem;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid #b33;
+            border-radius: 60px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6), 0 0 15px rgba(255, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-btn i {
+            font-size: 2rem;
+            color: #ff6868;
+            filter: drop-shadow(0 0 8px red);
+            transition: 0.2s;
+        }
+
+        /* эффект наползающей красной плазмы */
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: var(--y, 0);
+            left: var(--x, 0);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle closest-side, rgba(255, 80, 80, 0.6), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .social-btn:hover::before {
+            opacity: 1;
+        }
+
+        .social-btn:hover {
+            border-color: #ff5e5e;
+            background: #1f0606;
+            box-shadow: 0 0 30px #f33, 0 5px 25px black;
+            transform: scale(1.06) translateY(-4px);
+        }
+
+        .social-btn:hover i {
+            color: #ffb3b3;
+            transform: rotate(3deg) scale(1.1);
+        }
+
+        /* тултип для мыши (эффект свечения) */
+        .social-btn span {
+            z-index: 3;
+            position: relative;
+        }
+
+        /* кастомный скролл */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: #180000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b00;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px #ff8080;
+        }
+
+        /* адаптив */
+        @media (max-width: 500px) {
+            .azra-card {
+                padding: 1.5rem 1.2rem 2rem;
+            }
+            .nickname-window h1 {
+                font-size: 2.5rem;
+            }
+            .bio .glitch-text {
+                font-size: 1.2rem;
+            }
+            .social-btn {
+                min-width: 100%;
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+        }
+
+        /* маленькие акценты - светящиеся точки */
+        .dot-glow {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #f44;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #f44;
+            opacity: 0.6;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- несколько плавающих глитч-точек (декор) -->
+    <div class="dot-glow" style="top: 15%; left: 12%;"></div>
+    <div class="dot-glow" style="top: 80%; right: 8%;"></div>
+    <div class="dot-glow" style="bottom: 10%; left: 20%; animation: float 5s infinite;"></div>
+    <div class="dot-glow" style="top: 45%; right: 20%; width: 7px; height: 7px; background: #f77;"></div>
+
+    <main class="azra-card">
+        <!-- красное окошко с ником AZRA -->
+        <div class="nickname-window">
+            <h1>AZRA</h1>
+        </div>
+
+        <!-- описание: творческий профиль -->
+        <div class="bio">
+            <div class="glitch-text">
+                <i class="fas fa-paint-brush"></i>  ПЕРЕХОДНИК
+                <i class="fas fa-video"></i><br>
+                <i class="fas fa-feather-alt"></i> СОЦ-СЕТИ 
+                <i class="fas fa-mask"></i>
+            </div>
+        </div>
+
+        <!-- ссылки на соцсети (каналы) -->
+        <div class="links-grid">
+            <!-- Telegram канал -->
+            <a href="https://t.me/anxspn" target="_blank" rel="noopener" class="social-btn">
+                <i class="fab fa-telegram-plane"></i>
+                <span>Telegram</span>
+            </a>
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@anxspn?_r=1&_t=ZS-94GNN5D7w85" target="_blank" rel="noopener" class="social-btn">
+                <i class="fab fa-tiktok"></i>
+                <span>TikTok</span>
+            </a>
+            <!-- Twitter (X) -->
+            <a href="https://x.com/jHFHndg8Y2feUAD" target="_blank" rel="noopener" class="social-btn">
+                <i class="fab fa-x-twitter"></i> <!-- иконка X (fa-x-twitter) -->
+                <span>X / Twitter</span>
+            </a>
+            <!-- Bluesky -->
+            <a href="https://bsky.app/profile/1azra.bsky.social" target="_blank" rel="noopener" class="social-btn">
+                <i class="fas fa-cloud"></i> <!-- альтернатива для bluesky, так как нет официальной иконки, но можно использовать "fa-brands fa-bluesky" если шрифт обновлен, но для совместимости - облачко -->
+                <span>Bluesky</span>
+            </a>
+            <!-- Tumblr -->
+            <a href="https://www.tumblr.com/anxspn?source=share" target="_blank" rel="noopener" class="social-btn">
+                <i class="fab fa-tumblr"></i>
+                <span>Tumblr</span>
+            </a>
+            <!-- дополнительная плашка как "все ссылки" (без ссылки, просто настроение) -->
+            <div class="social-btn" style="background: #1f0303cc; cursor: default; filter: grayscale(0.5);">
+                <i class="fas fa-star"></i>
+                <span> ЭДИТОР </span>
+            </div>
+        </div>
+
+        <!-- подпись с подсветкой снизу (маленький эффект) -->
+        <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem; color: #b66; text-shadow: 0 0 10px #c44;">
+            <i class="fas fa-bolt" style="color: #f66;"></i> AZRA VISION <i class="fas fa-bolt" style="color: #f66;"></i>
+        </div>
+    </main>
+
+    <!-- скрипт для плазмы за кнопками (эффект следящего свечения) -->
+    <script>
+        (function() {
+            // добавим эффект движения красного пятна за мышкой внутри кнопок
+            const buttons = document.querySelectorAll('.social-btn');
+            
+            const applyGlow = (e, btn) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                btn.style.setProperty('--x', x + 'px');
+                btn.style.setProperty('--y', y + 'px');
+            };
+
+            buttons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => applyGlow(e, btn));
+                btn.addEventListener('mouseleave', () => {
+                    // можно очистить, но пусть пятно уходит за границы — оно скрыто через opacity
+                    btn.style.setProperty('--x', '-100px');
+                    btn.style.setProperty('--y', '-100px');
+                });
+            });
+
+            // дополнительная анимация для заголовка — редкое мерцание
+            const nick = document.querySelector('.nickname-window');
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    nick.style.boxShadow = '0 0 60px #ff8080, 0 0 100px #f33, inset 0 0 20px #fff';
+                    nick.style.transition = '0.08s';
+                    setTimeout(() => {
+                        nick.style.boxShadow = '0 15px 25px rgba(180, 0, 0, 0.7), 0 0 40px #ff4545, inset 0 2px 10px rgba(255, 255, 255, 0.5)';
+                    }, 120);
+                }
+            }, 3000);
+        })();
+    </script>
+
+    <!-- добавим иконку для bluesky из кастомного CDN (на случай, если хочешь официальную) 
+    но выше уже есть запасной вариант, но давай я заменю на brand, если поддерживается (fa-brands fa-bluesky) 
+    в версии 6.0+ есть иконка bluesky, поэтому я обновлю ссылку на кнопке через скрипт? лучше сразу заменю код вручную: -->
+    <script>
+        // автоматически заменим иконку блюскай на корректную, если шрифт поддерживает (fa-bluesky добавлен в 6.5.1)
+        (function fixBlueskyIcon() {
+            // проверим наличие иконки, если нет — останется облако
+            const testIcon = document.createElement('i');
+            testIcon.className = 'fab fa-bluesky';
+            document.body.appendChild(testIcon);
+            const isBlueskySupported = window.getComputedStyle(testIcon, '::before').content !== 'none' && window.getComputedStyle(testIcon, '::before').getPropertyValue('font-family') !== 'none';
+            document.body.removeChild(testIcon);
+            
+            if (isBlueskySupported) {
+                const bskyBtn = Array.from(document.querySelectorAll('.social-btn')).find(btn => btn.innerText.includes('Bluesky'));
+                if (bskyBtn) {
+                    const icon = bskyBtn.querySelector('i');
+                    if (icon) icon.className = 'fab fa-bluesky';
+                }
+            }
+        })();
+    </script>
+    <!-- также подстраховка: запасной вариант визуала (облако норм смотрится) -->
+</body>
+</html>
